@@ -1,0 +1,26 @@
+---
+import { carouselSlides } from "../data/clinicData";
+---
+
+<div class="carousel" aria-roledescription="carrossel" aria-label="Fotos da Dra. Gabriela Veit e da clínica">
+  <div class="frame">
+    <div class="track" id="track" tabindex="0">
+      {carouselSlides.map((slide) => (
+        <figure class="slide">
+          <img src={slide.src} alt={slide.alt} />
+        </figure>
+      ))}
+    </div>
+    <div class="photo-tag"><b>Dra. Gabriela Veit</b><span>CRM-SC 41005</span></div>
+  </div>
+  <div class="c-ctrl">
+    <button class="c-btn" id="prev" aria-label="Foto anterior">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 13L5 8l5-5"/></svg>
+    </button>
+    <div class="dots" id="dots" role="tablist" aria-label="Escolher foto"></div>
+    <span class="count" id="count">01 / 11</span>
+    <button class="c-btn" id="next" aria-label="Próxima foto">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+    </button>
+  </div>
+</div>

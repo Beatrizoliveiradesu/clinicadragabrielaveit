@@ -1,0 +1,84 @@
+---
+import { treatmentGroups } from "../data/clinicData";
+---
+
+<section class="contact" id="contato">
+  <div class="wrap contact-grid">
+    <div>
+      <p class="label">Agendamento</p>
+      <h2 class="sec-title">Solicite sua <em>consulta</em></h2>
+      <p class="sec-intro">Preencha os dados abaixo. Sua mensagem será preparada para envio ao WhatsApp oficial do consultório.</p>
+      <form id="form" novalidate>
+        <div class="row2">
+          <div class="field">
+            <label for="f-nome">Nome completo</label>
+            <input id="f-nome" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="f-tel">WhatsApp</label>
+            <input id="f-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(48) 9 0000-0000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-trat">Tratamento de interesse</label>
+          <select id="f-trat">
+            <option value="">Selecione</option>
+            <option>Consulta de Medicina Integrativa</option>
+            {treatmentGroups.flatMap((g) => g.items.map((i) => <option>{i.title}</option>))}
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-msg">Mensagem (opcional)</label>
+          <textarea id="f-msg"></textarea>
+        </div>
+        <label class="consent" for="f-lgpd">
+          <input id="f-lgpd" type="checkbox" /> Autorizo o uso dos meus dados apenas para contato e agendamento, conforme a LGPD.
+        </label>
+        <div>
+          <button class="btn btn-dark" type="submit">
+            Preparar mensagem 
+            <span class="arr">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M2 8h12M9 3l5 5-5 5" />
+              </svg>
+            </span>
+          </button>
+        </div>
+        <p class="form-msg" id="form-msg" hidden></p>
+        <div id="send-wrap" hidden>
+          <a class="btn" id="form-send" href="#" target="_blank" rel="noopener">
+            Abrir WhatsApp e enviar 
+            <span class="arr">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M2 8h12M9 3l5 5-5 5" />
+              </svg>
+            </span>
+          </a>
+        </div>
+      </form>
+    </div>
+    <aside class="info">
+      <div>
+        <p class="label">Endereço</p>
+        <h3>Edifício Office Green</h3>
+        <p>Rua da Praça, 241, Sala 920<br />Pedra Branca - Palhoça / SC<br />CEP: 88137-086</p>
+      </div>
+      <div>
+        <p class="label">Horários</p>
+        <ul class="hours">
+          <li><span>Segunda a sexta</span><span class="fill">09h às 18h</span></li>
+          <li><span>Sábado</span><span class="fill">sob agendamento</span></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label">Contato</p>
+        <p>WhatsApp (48) 98497-3968<br />Instagram @dragabrielaveit</p>
+      </div>
+      <div class="links">
+        <a class="link" href="https://www.google.com/maps/search/?api=1&query=Rua+da+Pra%C3%A7a+241+Sala+920+Edif%C3%ADcio+Office+Green+Pedra+Branca+Palho%C3%A7a+SC" target="_blank" rel="noopener">Ver no mapa</a>
+        <a class="link" href="https://www.instagram.com/dragabrielaveit/" target="_blank" rel="noopener">Instagram</a>
+        <a class="link wa-link" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </aside>
+  </div>
+</section>

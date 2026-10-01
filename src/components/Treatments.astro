@@ -1,0 +1,39 @@
+---
+import { treatmentGroups, getWhatsAppUrl } from "../data/clinicData";
+---
+
+<section id="tratamentos">
+  <div class="wrap">
+    <div class="treat-head">
+      <div>
+        <p class="label">Tratamentos</p>
+        <h2 class="sec-title">Cuidado médico <em>do metabolismo à estética</em></h2>
+      </div>
+      <p class="sec-intro" style="max-width:38ch">Todo tratamento começa com uma avaliação médica. A indicação é sempre individual.</p>
+    </div>
+    <div class="groups" id="groups">
+      {treatmentGroups.map((group) => (
+        <article class="group">
+          <span class="label">{group.label}</span>
+          <h3>{group.title}</h3>
+          <ul class="items">
+            {group.items.map((item) => (
+              <li>
+                <a target="_blank" rel="noopener" href={getWhatsAppUrl(`Olá! Gostaria de agendar uma avaliação para ${item.title}.`)}>
+                  <span class="t">{item.title}</span>
+                  <span class="d">{item.desc}</span>
+                  <span class="go" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <path d="M2 8h12M9 3l5 5-5 5" />
+                    </svg>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+    <p class="note">Resultados variam de pessoa para pessoa e dependem de avaliação médica.</p>
+  </div>
+</section>
