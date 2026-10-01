@@ -184,12 +184,31 @@ details p{padding:0 44px 26px 0;font-size:15.5px}
 form{display:grid;gap:22px;margin-top:40px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
 @media (max-width:560px){.row2{grid-template-columns:1fr}}
-.field{display:grid;gap:6px}
+.field{display:grid;gap:6px;position:relative}
 .field label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--muted)}
-.field input,.field select,.field textarea{font-family:var(--sans);font-weight:300;font-size:16px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid #CFC6BB;border-radius:0;padding:10px 0;width:100%;-webkit-appearance:none;appearance:none}
-.field select{background-image:linear-gradient(45deg,transparent 50%,var(--gold-deep) 50%),linear-gradient(135deg,var(--gold-deep) 50%,transparent 50%);background-position:calc(100% - 12px) 55%,calc(100% - 7px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.field input,.field select,.field textarea{font-family:var(--sans);font-weight:300;font-size:15.5px;color:var(--ink);background:var(--bg-soft);border:1px solid #D9D2C9;border-radius:12px;padding:13px 18px;width:100%;transition:border-color .25s,box-shadow .25s,background-color .25s;-webkit-appearance:none;appearance:none}
+.field select{padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 16 16' fill='none' stroke='%239C8665' stroke-width='1.8'%3E%3Cpath d='M4 6l4 4 4-4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:calc(100% - 16px) center;background-repeat:no-repeat;background-size:14px 14px;cursor:pointer}
+.field select option{background-color:var(--card);color:var(--ink);font-family:var(--sans);padding:12px 16px}
 .field textarea{min-height:90px;resize:vertical}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--gold-deep)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold-deep);box-shadow:0 0 0 3px rgba(189,167,136,.25),0 4px 12px rgba(54,49,45,.05);background-color:#FFFFFF}
+
+/* Select customizado (Dropdown) */
+.sr-select{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;opacity:0!important;pointer-events:none!important}
+.custom-select{position:relative;width:100%}
+.custom-select-trigger{width:100%;display:flex;align-items:center;justify-space-between;gap:12px;font-family:var(--sans);font-weight:300;font-size:15.5px;color:var(--ink);background:var(--bg-soft);border:1px solid #D9D2C9;border-radius:12px;padding:13px 18px;text-align:left;cursor:pointer;transition:border-color .25s,box-shadow .25s,background-color .25s}
+.custom-select-trigger:hover{border-color:var(--gold)}
+.custom-select-trigger:focus,.custom-select.open .custom-select-trigger{outline:none;border-color:var(--gold-deep);box-shadow:0 0 0 3px rgba(189,167,136,.25),0 4px 12px rgba(54,49,45,.05);background-color:#FFFFFF}
+.custom-select-label.placeholder{color:var(--muted)}
+.custom-select-arrow{flex:none;color:var(--gold-deep);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.custom-select.open .custom-select-arrow{transform:rotate(180deg)}
+.custom-select-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:50;margin:0;padding:6px;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px -10px rgba(54,49,45,.2),0 6px 16px rgba(54,49,45,.06);max-height:270px;overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease,visibility .25s ease;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
+.custom-select-dropdown::-webkit-scrollbar{width:6px}
+.custom-select-dropdown::-webkit-scrollbar-thumb{background:var(--gold);border-radius:999px}
+.custom-select.open .custom-select-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.custom-select-option{display:flex;align-items:center;justify-space-between;gap:12px;padding:12px 14px;margin-block:2px;border-radius:8px;font-family:var(--sans);font-size:15px;font-weight:300;color:var(--ink);cursor:pointer;transition:background-color .2s,color .2s,padding-left .2s;user-select:none;-webkit-user-select:none}
+.custom-select-option:hover{background-color:rgba(189,167,136,.14);color:var(--gold-deep);padding-left:18px}
+.custom-select-option.selected{background-color:rgba(189,167,136,.2);color:var(--ink);font-weight:500}
+.custom-select-option .option-check{flex:none;color:var(--gold-deep)}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.55}
 .consent input{margin-top:3px;accent-color:var(--ink)}
 .form-msg{font-size:14.5px;color:var(--ink)}
@@ -459,6 +478,143 @@ document.getElementById("groups").innerHTML = G.map(g => `<article class="group"
 
 document.getElementById("f-trat").innerHTML = `<option value="">Selecione</option><option>Consulta de Medicina Integrativa</option>` +
   G.flatMap(g => g.items.map(i => `<option>${i[0]}</option>`)).join("");
+
+/* Custom Select Component (Dropdown customizado harmonizado com o design system da clínica) */
+function initCustomSelects() {
+  document.querySelectorAll(".field select").forEach(select => {
+    if (select.dataset.customSelectInit) {
+      if (select._updateCustomOptions) select._updateCustomOptions();
+      return;
+    }
+    select.dataset.customSelectInit = "true";
+    select.classList.add("sr-select");
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "custom-select";
+
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "custom-select-trigger";
+    trigger.setAttribute("aria-haspopup", "listbox");
+    trigger.setAttribute("aria-expanded", "false");
+
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "custom-select-label";
+
+    const arrowSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    arrowSvg.setAttribute("class", "custom-select-arrow");
+    arrowSvg.setAttribute("width", "14");
+    arrowSvg.setAttribute("height", "14");
+    arrowSvg.setAttribute("viewBox", "0 0 16 16");
+    arrowSvg.setAttribute("fill", "none");
+    arrowSvg.setAttribute("stroke", "currentColor");
+    arrowSvg.setAttribute("stroke-width", "1.8");
+    arrowSvg.setAttribute("aria-hidden", "true");
+    arrowSvg.innerHTML = '<path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/>';
+
+    trigger.appendChild(labelSpan);
+    trigger.appendChild(arrowSvg);
+
+    const dropdown = document.createElement("ul");
+    dropdown.className = "custom-select-dropdown";
+    dropdown.setAttribute("role", "listbox");
+    dropdown.setAttribute("tabindex", "-1");
+
+    function updateOptions() {
+      dropdown.innerHTML = "";
+      const selectedIndex = select.selectedIndex >= 0 ? select.selectedIndex : 0;
+      Array.from(select.options).forEach((opt, idx) => {
+        const isSelected = idx === selectedIndex;
+        const li = document.createElement("li");
+        li.className = "custom-select-option" + (isSelected ? " selected" : "");
+        li.setAttribute("role", "option");
+        li.setAttribute("aria-selected", isSelected ? "true" : "false");
+        li.dataset.value = opt.value;
+
+        if (isSelected) {
+          labelSpan.textContent = opt.textContent;
+          if (!opt.value) labelSpan.classList.add("placeholder");
+          else labelSpan.classList.remove("placeholder");
+        }
+
+        const textSpan = document.createElement("span");
+        textSpan.textContent = opt.textContent;
+        li.appendChild(textSpan);
+
+        if (isSelected && opt.value) {
+          const checkSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          checkSvg.setAttribute("class", "option-check");
+          checkSvg.setAttribute("width", "14");
+          checkSvg.setAttribute("height", "14");
+          checkSvg.setAttribute("viewBox", "0 0 16 16");
+          checkSvg.setAttribute("fill", "none");
+          checkSvg.setAttribute("stroke", "currentColor");
+          checkSvg.setAttribute("stroke-width", "2");
+          checkSvg.innerHTML = '<path d="M3 8.5l3.5 3.5 6.5-6.5" stroke-linecap="round" stroke-linejoin="round"/>';
+          li.appendChild(checkSvg);
+        }
+
+        li.addEventListener("click", () => {
+          select.selectedIndex = idx;
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+          closeDropdown();
+        });
+
+        dropdown.appendChild(li);
+      });
+    }
+
+    select._updateCustomOptions = updateOptions;
+
+    function toggleDropdown() {
+      if (wrapper.classList.contains("open")) closeDropdown();
+      else openDropdown();
+    }
+
+    function openDropdown() {
+      document.querySelectorAll(".custom-select.open").forEach(cs => {
+        if (cs !== wrapper) cs.classList.remove("open");
+      });
+      wrapper.classList.add("open");
+      trigger.setAttribute("aria-expanded", "true");
+    }
+
+    function closeDropdown() {
+      wrapper.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+
+    trigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      toggleDropdown();
+    });
+
+    select.addEventListener("change", updateOptions);
+
+    trigger.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === " ") {
+        e.preventDefault();
+        openDropdown();
+      } else if (e.key === "Escape") {
+        closeDropdown();
+      }
+    });
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(dropdown);
+    select.parentNode.insertBefore(wrapper, select.nextSibling);
+
+    updateOptions();
+  });
+}
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".custom-select")) {
+    document.querySelectorAll(".custom-select.open").forEach(cs => cs.classList.remove("open"));
+  }
+});
+
+initCustomSelects();
 
 document.querySelectorAll(".wa-link").forEach(a => a.href = wa("Olá! Gostaria de agendar uma consulta com a Dra. Gabriela Veit."));
 
