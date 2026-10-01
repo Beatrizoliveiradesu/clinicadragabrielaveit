@@ -65,45 +65,7 @@ section{padding-block:clamp(72px,11vw,136px)}
 .head-cta i{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;color:#fff}
 .head-cta i svg{width:12px;height:12px}
 
-/* Carrossel: rola sozinho a cada 4 segundos e aceita deslizar com o dedo */
-(() => {
-  const track = document.getElementById("track"), N = track.children.length, dots = document.getElementById("dots"), count = document.getElementById("count");
-  const pad = n => String(n).padStart(2, "0"), DELAY = 4000;
-  let i = 0, timer = null;
-  dots.innerHTML = Array.from({length: N}, (_, k) => `<button class="dot" role="tab" aria-label="Foto ${k+1}" aria-selected="${k===0}"></button>`).join("");
-  const dotEls = [...dots.children];
-  function go(k){
-    i = (k + N) % N;
-    track.style.transform = `translate3d(${-i * 100}%,0,0)`;
-    dotEls.forEach((d, j) => d.setAttribute("aria-selected", j === i));
-    count.textContent = `${pad(i+1)} / ${pad(N)}`;
-  }
-  function start(){ clearInterval(timer); timer = setInterval(() => go(i + 1), DELAY); }
-  document.getElementById("prev").onclick = () => { go(i - 1); start(); };
-  document.getElementById("next").onclick = () => { go(i + 1); start(); };
-  dotEls.forEach((d, k) => d.onclick = () => { go(k); start(); });
-  track.addEventListener("keydown", e => { if (e.key === "ArrowRight") { go(i + 1); start(); } if (e.key === "ArrowLeft") { go(i - 1); start(); } });
-  /* deslizar com o dedo */
-  let x0 = null, y0 = 0, dx = 0, horiz = null;
-  track.addEventListener("pointerdown", e => { x0 = e.clientX; y0 = e.clientY; dx = 0; horiz = null; clearInterval(timer); });
-  track.addEventListener("pointermove", e => {
-    if (x0 === null) return;
-    const mx = e.clientX - x0, my = e.clientY - y0;
-    if (horiz === null && (Math.abs(mx) > 6 || Math.abs(my) > 6)) horiz = Math.abs(mx) > Math.abs(my);
-    if (!horiz) return;
-    dx = mx; track.classList.add("dragging");
-    track.style.transform = `translate3d(calc(${-i * 100}% + ${dx}px),0,0)`;
-  });
-  const end = () => {
-    if (x0 === null) return;
-    track.classList.remove("dragging");
-    if (horiz && Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); else go(i);
-    x0 = null; start();
-  };
-  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => track.addEventListener(ev, end));
-  document.addEventListener("visibilitychange", () => document.hidden ? clearInterval(timer) : start());
-  go(0); start();
-})();
+
 
 /* Menu */
 .drawer{position:fixed;inset:0;z-index:60;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 22px) 24px calc(env(safe-area-inset-bottom,0px) + 30px);display:flex;flex-direction:column}
@@ -282,7 +244,7 @@ footer a{color:#E9E3DB;text-decoration:none}
     <a href="#duvidas" data-close>Dúvidas</a>
     <a href="#contato" data-close>Agendamento</a>
   </nav>
-  <div class="foot">Office Green · Palhoça / SC<br>Atendimento com hora marcada</div>
+  <div class="foot">Edifício Office Green · Pedra Branca - Palhoça / SC<br>Atendimento com hora marcada</div>
 </div>
 
 <main>
@@ -290,7 +252,7 @@ footer a{color:#E9E3DB;text-decoration:none}
 <section class="hero" id="inicio">
   <div class="wrap hero-grid">
     <div>
-      <p class="label">Medicina Integrativa · Palhoça / SC</p>
+      <p class="label">Medicina Integrativa · Pedra Branca - Palhoça / SC</p>
       <h1 style="margin-top:22px">Descubra a leveza <em>de transformar sua saúde</em></h1>
       <p class="sub">Medicina Integrativa, acompanhamento médico completo, emagrecimento com supervisão médica, harmonização facial, estética corporal e tratamentos capilares.</p>
       <div class="actions">
@@ -354,8 +316,8 @@ footer a{color:#E9E3DB;text-decoration:none}
       </div>
       <ul class="creds">
         <li><span>Registro</span><span>CRM/SC <span class="fill">00000</span></span></li>
-        <li><span>Formação</span><span class="fill">Faculdade · ano</span></li>
-        <li><span>Pós-graduação</span><span class="fill">Instituição · área</span></li>
+        <li><span>Formação</span><span>2025 pela Faculdade UNISUL</span></li>
+        <li><span>Pós-graduação</span><span>Medicina Funcional Integrativa com VS Clinic</span></li>
       </ul>
     </div>
   </div>
@@ -434,12 +396,12 @@ footer a{color:#E9E3DB;text-decoration:none}
       </form>
     </div>
     <aside class="info">
-      <div><p class="label">Endereço</p><h3>Office Green · Palhoça / SC</h3><p><span class="fill">Rua, número, sala · CEP</span><br>Grande Florianópolis</p></div>
+      <div><p class="label">Endereço</p><h3>Edifício Office Green</h3><p>Rua da Praça, 241, Sala 920<br>Pedra Branca - Palhoça / SC<br>CEP: 88137-086</p></div>
       <div><p class="label">Horários</p>
         <ul class="hours"><li><span>Segunda a sexta</span><span class="fill">09h às 18h</span></li><li><span>Sábado</span><span class="fill">sob agendamento</span></li></ul></div>
       <div><p class="label">Contato</p><p>WhatsApp (48) 98497-3968<br>Instagram @dragabrielaveit</p></div>
       <div class="links">
-        <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Office+Green+Palho%C3%A7a+SC" target="_blank" rel="noopener">Ver no mapa</a>
+        <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Rua+da+Pra%C3%A7a+241+Sala+920+Edif%C3%ADcio+Office+Green+Pedra+Branca+Palho%C3%A7a+SC" target="_blank" rel="noopener">Ver no mapa</a>
         <a class="link" href="https://www.instagram.com/dragabrielaveit/" target="_blank" rel="noopener">Instagram</a>
         <a class="link wa-link" href="#" target="_blank" rel="noopener">WhatsApp</a>
       </div>
@@ -453,7 +415,7 @@ footer a{color:#E9E3DB;text-decoration:none}
     <div class="foot-grid">
       <div><a class="logo" href="#inicio"><b>Dra. Gabriela Veit</b><span>Medicina Integrativa</span></a>
         <p style="margin-top:18px;max-width:34ch">Medicina Integrativa, longevidade e estética com atendimento particular e hora marcada.</p></div>
-      <div><h4>Consultório</h4><p>Office Green · Palhoça / SC<br>Grande Florianópolis</p></div>
+      <div><h4>Consultório</h4><p>Rua da Praça, 241, Sala 920 - Edifício Office Green<br>Pedra Branca - Palhoça / SC<br>CEP: 88137-086</p></div>
       <div><h4>Responsável técnica</h4><p>Dra. Gabriela Veit<br>CRM/SC <span class="fill">00000</span><br>CNPJ <span class="fill">00.000.000/0001-00</span></p></div>
     </div>
     <div class="legal">
@@ -528,6 +490,166 @@ form.addEventListener("submit", e => {
   msg.textContent = "Mensagem pronta. Toque no botão abaixo para enviar pelo WhatsApp.";
   sendWrap.hidden = false;
 });
+
+/* Carrossel da Galeria / Resultados: slider automático com loop infinito suave (3s) */
+(() => {
+  const track = document.getElementById("track");
+  if (!track) return;
+  
+  const originalSlides = Array.from(track.children);
+  const N = originalSlides.length;
+  if (N === 0) return;
+
+  const dots = document.getElementById("dots");
+  const count = document.getElementById("count");
+  const prevBtn = document.getElementById("prev");
+  const nextBtn = document.getElementById("next");
+  const pad = n => String(n).padStart(2, "0");
+  const DELAY = 3000;
+
+  // Clona o primeiro e último slide para criar o efeito de loop infinito contínuo
+  const firstClone = originalSlides[0].cloneNode(true);
+  const lastClone = originalSlides[N - 1].cloneNode(true);
+  firstClone.classList.add("clone");
+  lastClone.classList.add("clone");
+  
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, originalSlides[0]);
+
+  let currentIndex = 1;
+  let timer = null;
+  let isTransitioning = false;
+
+  // Criar os indicadores de bolinhas (dots)
+  if (dots) {
+    dots.innerHTML = Array.from({length: N}, (_, k) => 
+      `<button class="dot" role="tab" aria-label="Foto ${k+1}" aria-selected="${k===0}"></button>`
+    ).join("");
+  }
+  const dotEls = dots ? [...dots.children] : [];
+
+  function updateDotsAndCount() {
+    const realIndex = (currentIndex - 1 + N) % N;
+    dotEls.forEach((d, j) => d.setAttribute("aria-selected", j === realIndex));
+    if (count) count.textContent = `${pad(realIndex + 1)} / ${pad(N)}`;
+  }
+
+  function setTrackPosition(animate = true) {
+    if (animate) {
+      track.style.transition = "transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)";
+    } else {
+      track.style.transition = "none";
+    }
+    track.style.transform = `translate3d(${-currentIndex * 100}%, 0, 0)`;
+  }
+
+  function goTo(index) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    currentIndex = index;
+    setTrackPosition(true);
+    updateDotsAndCount();
+  }
+
+  function nextSlide() {
+    goTo(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    goTo(currentIndex - 1);
+  }
+
+  function startTimer() {
+    stopTimer();
+    timer = setInterval(nextSlide, DELAY);
+  }
+
+  function stopTimer() {
+    if (timer) clearInterval(timer);
+  }
+
+  // Trata o reset de posição ao fim da transição para criar o loop infinito contínuo
+  track.addEventListener("transitionend", () => {
+    isTransitioning = false;
+    if (currentIndex === N + 1) {
+      currentIndex = 1;
+      setTrackPosition(false);
+    } else if (currentIndex === 0) {
+      currentIndex = N;
+      setTrackPosition(false);
+    }
+  });
+
+  // Navegação manual por botões
+  if (prevBtn) prevBtn.onclick = () => { prevSlide(); startTimer(); };
+  if (nextBtn) nextBtn.onclick = () => { nextSlide(); startTimer(); };
+
+  // Navegação por bolinhas
+  dotEls.forEach((d, k) => {
+    d.onclick = () => {
+      goTo(k + 1);
+      startTimer();
+    };
+  });
+
+  // Navegação por teclado
+  track.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { nextSlide(); startTimer(); }
+    if (e.key === "ArrowLeft") { prevSlide(); startTimer(); }
+  });
+
+  // Suporte a gestos touch e drag com ponteiro
+  let x0 = null, y0 = 0, dx = 0, horiz = null;
+  track.addEventListener("pointerdown", e => {
+    if (isTransitioning) return;
+    x0 = e.clientX;
+    y0 = e.clientY;
+    dx = 0;
+    horiz = null;
+    stopTimer();
+  });
+
+  track.addEventListener("pointermove", e => {
+    if (x0 === null) return;
+    const mx = e.clientX - x0;
+    const my = e.clientY - y0;
+    if (horiz === null && (Math.abs(mx) > 6 || Math.abs(my) > 6)) {
+      horiz = Math.abs(mx) > Math.abs(my);
+    }
+    if (!horiz) return;
+    dx = mx;
+    track.classList.add("dragging");
+    track.style.transition = "none";
+    track.style.transform = `translate3d(calc(${-currentIndex * 100}% + ${dx}px), 0, 0)`;
+  });
+
+  const onPointerEnd = () => {
+    if (x0 === null) return;
+    track.classList.remove("dragging");
+    if (horiz && Math.abs(dx) > 40) {
+      if (dx < 0) nextSlide();
+      else prevSlide();
+    } else {
+      setTrackPosition(true);
+    }
+    x0 = null;
+    startTimer();
+  };
+
+  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => {
+    track.addEventListener(ev, onPointerEnd);
+  });
+
+  // Pausar na mudança de aba
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopTimer();
+    else startTimer();
+  });
+
+  setTrackPosition(false);
+  updateDotsAndCount();
+  startTimer();
+})();
 </script>
 </body>
 </html>
